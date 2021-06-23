@@ -21,7 +21,7 @@ app.post("/login", async (req, res) => {
 
 	if (user && bcrypt.compareSync(password, user.password)) {
 		const token = uuidv4();
-        await connection.query(`DELETE FROM "userToken" WHERE "userId" = $1`, [user.id]);
+		await connection.query(`DELETE FROM "userToken" WHERE "userId" = $1`, [user.id]);
 		await connection.query(`INSERT INTO "userToken" ("userId", token) values ($1,$2)`, [user.id, token]);
 		const resp = {
 			name: user.name,
@@ -39,7 +39,16 @@ app.get("/registers", async (req, res) => {
 	const user = await authUser(authorization);
 	if (!user) return res.sendStatus(401);
 	const registers = (await connection.query(`SELECT * FROM register WHERE "userId" = $1`, [user.id])).rows;
-	res.send(registers);
+
+	const revenue = (await connection.query(`SELECT SUM(value) AS total FROM register WHERE register.type='revenue' AND register."userId"=$1`, [user.id])).rows[0];
+	const expense = (await connection.query(`SELECT SUM(value) AS total FROM register WHERE register.type='expense' AND register."userId"=$1`, [user.id])).rows[0];
+	const balance = (revenue.total - expense.total).toFixed(2);
+    const resp = {
+        registers,
+        balance
+    }
+    console.log(resp)
+	res.send(resp);
 });
 
 app.post("/registers/:type", async (req, res) => {
