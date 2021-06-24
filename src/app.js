@@ -1,10 +1,14 @@
-import app from "./server.js";
 import connection from "./database/database.js";
 import bcrypt from "bcrypt";
 import { v4 as uuidv4 } from "uuid";
-import dayjs from "dayjs";
 
-app.post("/register", async (req, res) => {
+import express from "express";
+import cors from "cors";
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+app.post("/user/register", async (req, res) => {
 	const { name, email, password } = req.body;
 	if (!name || !email || !password) return res.sendStatus(400);
 	const existingEmail = (await connection.query(`SELECT * FROM users WHERE email = $1`, [email])).rows;
@@ -14,7 +18,7 @@ app.post("/register", async (req, res) => {
 	res.sendStatus(201);
 });
 
-app.post("/login", async (req, res) => {
+app.post("/user/login", async (req, res) => {
 	const { email, password } = req.body;
 	if (!email || !password) return res.sendStatus(400);
 	const user = (await connection.query(`SELECT * FROM users WHERE email = $1`, [email])).rows[0];
@@ -33,6 +37,14 @@ app.post("/login", async (req, res) => {
 	res.sendStatus(401);
 });
 
+app.post("/user/logout", async (req, res) => {
+	const authorization = req.headers["authorization"];
+	if (!authorization) return res.sendStatus(400);
+	const user = await authUser(authorization);
+	if (!user) return res.sendStatus(401);
+	await connection.query(`DELETE FROM "userToken" WHERE token = $1`, [user.token]);
+});
+
 app.get("/registers", async (req, res) => {
 	const authorization = req.headers["authorization"];
 	if (!authorization) return res.sendStatus(400);
@@ -40,14 +52,22 @@ app.get("/registers", async (req, res) => {
 	if (!user) return res.sendStatus(401);
 	const registers = (await connection.query(`SELECT * FROM register WHERE "userId" = $1`, [user.id])).rows;
 
-	const revenue = (await connection.query(`SELECT SUM(value) AS total FROM register WHERE register.type='revenue' AND register."userId"=$1`, [user.id])).rows[0];
-	const expense = (await connection.query(`SELECT SUM(value) AS total FROM register WHERE register.type='expense' AND register."userId"=$1`, [user.id])).rows[0];
+	const revenue = (
+		await connection.query(`SELECT SUM(value) AS total FROM register WHERE register.type='revenue' AND register."userId"=$1`, [
+			user.id,
+		])
+	).rows[0];
+	const expense = (
+		await connection.query(`SELECT SUM(value) AS total FROM register WHERE register.type='expense' AND register."userId"=$1`, [
+			user.id,
+		])
+	).rows[0];
 	const balance = (revenue.total - expense.total).toFixed(2);
-    const resp = {
-        registers,
-        balance
-    }
-    console.log(resp)
+	const resp = {
+		registers,
+		balance,
+	};
+	console.log(resp);
 	res.send(resp);
 });
 
@@ -83,3 +103,5 @@ async function authUser(authorization) {
 	).rows[0];
 	return user;
 }
+
+export default app;
