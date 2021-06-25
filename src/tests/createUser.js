@@ -1,17 +1,14 @@
-import connection from "../database/database.js";
-import bcrypt from "bcrypt";
+import app from "../app";
+import supertest from "supertest";
 
 async function createUser() {
-	const name = "teste";
-	const email = "teste@teste.com";
-	const password = "123";
-
-	await connection.query(`INSERT INTO users (name, email, password) values ($1,$2,$3)`, [name, email, bcrypt.hashSync(password, 10)]);
-	return {
-		name,
-		email,
-		password,
+	const obj = {
+		name: "teste",
+		email: "teste@teste.com",
+		password: "123",
 	};
+	await supertest(app).post("/user/register").send(obj);
+	return obj;
 }
 
 export default createUser;
