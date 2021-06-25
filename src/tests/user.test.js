@@ -1,36 +1,15 @@
 import supertest from "supertest";
 import app from "../app.js";
 import connection from "../database/database.js";
-import bcrypt from "bcrypt";
-import { v4 } from "uuid";
+import createUser from "./createUser.js";
+import loginUser from "./loginUser";
 
 beforeEach(async () => {
 	await connection.query("DELETE FROM users");
-	await connection.query("DELETE FROM register");
 	await connection.query(`DELETE FROM "userToken"`);
 });
 
 afterAll( () => connection.end());
-
-async function createUser() {
-	const name = "teste";
-	const email = "teste@teste.com";
-	const password = "123";
-
-	await connection.query(`INSERT INTO users (name, email, password) values ($1,$2,$3)`, [name, email, bcrypt.hashSync(password, 10)]);
-	return {
-		name,
-		email,
-		password,
-	};
-}
-
-async function loginUser(email, password) {
-	const user = (await connection.query(`SELECT * FROM users WHERE email = $1`, [email])).rows[0];
-	const token = v4();
-	await connection.query(`INSERT INTO "userToken" ("userId", token) values ($1,$2)`, [user.id, token]);
-	return token;
-}
 
 describe("POST /user/register", () => {
 	it("return 201 when create new user", async () => {
