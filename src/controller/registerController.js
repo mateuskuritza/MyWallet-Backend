@@ -24,7 +24,7 @@ const Register = {
 		const balance = (revenue.total - expense.total).toFixed(2);
 		const resp = {
 			registers,
-			balance,
+			balance: parseFloat(balance),
 		};
 		res.send(resp);
 	},
