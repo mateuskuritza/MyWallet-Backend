@@ -72,7 +72,6 @@ describe("POST /user/register", () => {
 describe("POST /user/login", () => {
 	it("return 400 invalid email", async () => {
 		const obj = {
-			name: "teste",
 			email: "",
 			password: "123",
 		};
@@ -81,7 +80,6 @@ describe("POST /user/login", () => {
 	});
 	it("return 400 invalid password", async () => {
 		const obj = {
-			name: "teste",
 			email: "teste@teste.com",
 			password: "",
 		};
@@ -90,7 +88,6 @@ describe("POST /user/login", () => {
 	});
 	it("return 401 password or email not registered", async () => {
 		const obj = {
-			name: "teste",
 			email: "teste@teste.com",
 			password: "123",
 		};
