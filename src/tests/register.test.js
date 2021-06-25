@@ -8,7 +8,10 @@ beforeEach(async () => {
 	await connection.query("DELETE FROM register");
 });
 
-afterAll(() => connection.end());
+afterAll(() => {
+	await connection.query("DELETE FROM register");
+	connection.end();
+});
 
 describe("GET registers", () => {
 	it("return 400 invalid authorization", async () => {

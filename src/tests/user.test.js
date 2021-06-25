@@ -9,7 +9,11 @@ beforeEach(async () => {
 	await connection.query(`DELETE FROM "userToken"`);
 });
 
-afterAll( () => connection.end());
+afterAll(() => {
+	await connection.query("DELETE FROM users");
+	await connection.query(`DELETE FROM "userToken"`);
+	connection.end();
+});
 
 describe("POST /user/register", () => {
 	it("return 201 when create new user", async () => {
