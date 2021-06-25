@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "test": "npx jest -i",
-    "start": "npx nodemon ./src/server.js --ext js"
+    "start": "node ./src/server.js"
   },
   "keywords": [],
   "author": "",
