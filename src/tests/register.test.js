@@ -8,7 +8,7 @@ beforeEach(async () => {
 	await connection.query("DELETE FROM register");
 });
 
-afterAll(() => {
+afterAll(async () => {
 	await connection.query("DELETE FROM register");
 	connection.end();
 });

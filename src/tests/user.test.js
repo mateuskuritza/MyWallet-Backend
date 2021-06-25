@@ -9,7 +9,7 @@ beforeEach(async () => {
 	await connection.query(`DELETE FROM "userToken"`);
 });
 
-afterAll(() => {
+afterAll(async () => {
 	await connection.query("DELETE FROM users");
 	await connection.query(`DELETE FROM "userToken"`);
 	connection.end();
