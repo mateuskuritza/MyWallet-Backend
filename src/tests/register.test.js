@@ -39,7 +39,7 @@ describe("POST registers/:type", () => {
 		const newUser = await createUser();
 		const newToken = await loginUser(newUser.email, newUser.password);
 		const newRegister = {
-			description: "teste",
+			description: "teste" ,
 			value: 30.5,
 		};
 		const result = await supertest(app).post("/registers/revenue").send(newRegister).set("Authorization", `Bearer ${newToken}`);
