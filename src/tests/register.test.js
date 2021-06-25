@@ -33,3 +33,47 @@ describe("GET registers", () => {
 		expect(result.body).toMatchObject(schema);
 	});
 });
+
+describe("POST registers/:type", () =>{
+    //!description || !value || !["revenue", "expense"].includes(type) || !authorization
+    it("return 201 new revenue", async () => {
+        const newUser = await createUser();
+		const newToken = await loginUser(newUser.email, newUser.password);
+        const newRegister = {
+            description: "teste",
+            value: 30.5
+        }
+        const result = await supertest(app).post("/registers/revenue").send(newRegister).set("Authorization", `Bearer ${newToken}`);
+        expect(result.status).toEqual(201);
+    })
+    it("return 201 new expense", async () => {
+        const newUser = await createUser();
+		const newToken = await loginUser(newUser.email, newUser.password);
+        const newRegister = {
+            description: "teste",
+            value: 30.5
+        }
+        const result = await supertest(app).post("/registers/expense").send(newRegister).set("Authorization", `Bearer ${newToken}`);
+        expect(result.status).toEqual(201);
+    })
+    it("return 400 invalid description", async () => {
+        const newUser = await createUser();
+		const newToken = await loginUser(newUser.email, newUser.password);
+        const newRegister = {
+            description: "",
+            value: 30.5
+        }
+        const result = await supertest(app).post("/registers/revenue").send(newRegister).set("Authorization", `Bearer ${newToken}`);
+        expect(result.status).toEqual(400);
+    })
+    it("return 400 invalid value", async () => {
+        const newUser = await createUser();
+		const newToken = await loginUser(newUser.email, newUser.password);
+        const newRegister = {
+            description: "teste",
+            value: "teste"
+        }
+        const result = await supertest(app).post("/registers/revenue").send(newRegister).set("Authorization", `Bearer ${newToken}`);
+        expect(result.status).toEqual(400);
+    })
+})

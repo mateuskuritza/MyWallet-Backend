@@ -32,7 +32,7 @@ const Register = {
 		const authorization = req.headers["authorization"];
 		const { description, value } = req.body;
 		const { type } = req.params;
-		if (!description || !value || !["revenue", "expense"].includes(type) || !authorization) return res.sendStatus(400);
+		if (!description || !value || !isNaN(value) || value <= 0 || !["revenue", "expense"].includes(type) || !authorization) return res.sendStatus(400);
 		const user = await authUser(authorization);
 		if (!user) return res.sendStatus(401);
 		const today = new Date();
