@@ -1,5 +1,6 @@
 import connection from "../database/database.js";
 import authUser from "./authUser.js";
+import { newRegisterSchema } from "../schemasJoi/schemas.js";
 
 const Register = {
 	async registers(req, res) {
@@ -37,14 +38,7 @@ const Register = {
 			const authorization = req.headers["authorization"];
 			const { description, value } = req.body;
 			const { type } = req.params;
-			if (
-				!description ||
-				!value ||
-				isNaN(value) ||
-				value <= 0 ||
-				!["revenue", "expense"].includes(type) ||
-				!authorization
-			)
+			if (newRegisterSchema.validate(req.body).error || !["revenue", "expense"].includes(type) || !authorization)
 				return res.sendStatus(400);
 			const user = await authUser(authorization);
 			if (!user) return res.sendStatus(401);

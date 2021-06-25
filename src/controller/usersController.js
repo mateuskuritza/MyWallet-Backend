@@ -2,12 +2,13 @@ import connection from "../database/database.js";
 import bcrypt from "bcrypt";
 import { v4 as uuidv4 } from "uuid";
 import authUser from "./authUser.js";
+import { newUserSchema, loginSchema } from "../schemasJoi/schemas.js";
 
 const User = {
 	async register(req, res) {
 		try {
 			const { name, email, password } = req.body;
-			if (!name || !email || !password) return res.sendStatus(400);
+			if (newUserSchema.validate(req.body).error) return res.sendStatus(400);
 			const existingEmail = (await connection.query(`SELECT * FROM users WHERE email = $1`, [email])).rows;
 			if (existingEmail.length > 0) return res.sendStatus(409);
 			const hashPassword = bcrypt.hashSync(password, 12);
@@ -20,7 +21,7 @@ const User = {
 	async login(req, res) {
 		try {
 			const { email, password } = req.body;
-			if (!email || !password) return res.sendStatus(400);
+			if (loginSchema.validate(req.body).error) return res.sendStatus(400);
 			const user = (await connection.query(`SELECT * FROM users WHERE email = $1`, [email])).rows[0];
 
 			if (user && bcrypt.compareSync(password, user.password)) {
