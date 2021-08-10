@@ -1,16 +1,24 @@
-# Carteira online
-### Projeto 14 do bootcamp Responde Aí
-## Tecnologias Utilizadas:
+# MyWallet
 
-| HTML                                                               	| CSS                                                               	| Javascript                                                             	| NodeJS                                                             	| ReactJS                                                            	| PostgresSQL                                                        	|
-|--------------------------------------------------------------------	|-------------------------------------------------------------------	|------------------------------------------------------------------------	|--------------------------------------------------------------------	|--------------------------------------------------------------------	|--------------------------------------------------------------------	|
-| <img src="https://cdn.svgporn.com/logos/html-5.svg" width="45px"/> 	| <img src="https://cdn.svgporn.com/logos/css-3.svg" width="45px"/> 	| <img src="https://cdn.svgporn.com/logos/javascript.svg" width="45px"/> 	| <img src="https://cdn.svgporn.com/logos/nodejs.svg" width="45px"/> 	| <img src="https://cdn.svgporn.com/logos/react.svg" width="45px"/> 	| <img src="https://cdn.svgporn.com/logos/postgresql.svg" width="45px"/> 	|
+Acesse o projeto clicando <a href="https://my-wallet-front-end.vercel.app/login">aqui</a>!
 
-Além disso também foi utilizado **Express** para a criação da API e **React-router-dom** para a criação das rotas no frontend.
+## Sobre
+
+> Para maiores informações sobre o projeto acesse o repositório do frontend disponível <a href="https://github.com/mateuskuritza/MyWallet-FrontEnd">aqui</a>.
 
 ### Instruções de uso:
-> Foi realizado o deploy do frontend na **Vercel** no link https://my-wallet-front-end.vercel.app/login;
+> Caso queria rodar a aplicação na sua máquina é necessário rodar o frontend disponível <a href="https://github.com/mateuskuritza/MyWallet-FrontEnd">aqui</a>.
 
-> Já o backend está hospedado na **Heroku** no link https://mywallet-bootcamp-kuritza.herokuapp.com/;
+> Para o backend:
 
-> Para testar o projeto basta abrir o link da Vercel que já está integrado ao backend;
+  1. Clone esse repositório
+  2. Instale as dependências com
+    ```npm i```
+  3. Crie um novo banco de dados postgres utilizando o arquivo "dump.sql" em src/database/dump.sql
+  4. Configure um arquivo .env conforme o arquivo example.env
+  5. Inicie o backend com o comando
+    ```npm start```
+  6. Por fim acesse http://localhost:3000 no seu navegador preferido :)
+  7. Caso não queira criar uma conta, acesse com o email "teste@teste.com" e senha "123"
+
+> Outra alternativa é utilizar a <a href="https://mywallet-bootcamp-kuritza.herokuapp.com/">url</a> onde foi realizado o deploy do backend na Heroku.
